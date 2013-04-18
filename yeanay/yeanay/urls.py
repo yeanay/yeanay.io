@@ -1,10 +1,14 @@
 from django.conf.urls import patterns, include, url
 
+from ideology.views import congress
+
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^ideology/congress/(\d+)/(\w+)/', congress),
+
     # Examples:
     # url(r'^$', 'yeanay.views.home', name='home'),
     # url(r'^yeanay/', include('yeanay.foo.urls')),
