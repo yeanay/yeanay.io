@@ -6,5 +6,7 @@ class ideology(models.Model):
     first_dimension = models.FloatField()
     second_dimension = models.FloatField()
     state_id = models.IntegerField()
-    party_code = models.IntegerField()
+    party_id = models.IntegerField()
     name = models.TextField()
+    district = models.IntegerField()
+    chamber = models.CharField(max_length=6)
