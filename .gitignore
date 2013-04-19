@@ -2,3 +2,4 @@ env/
 *.pyc
 /yeanay/yeanay/local_settings.py
 *~
+/yeanay/data/bios/*
