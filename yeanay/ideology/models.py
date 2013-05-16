@@ -32,3 +32,4 @@ class legislator_session(models.Model):
     state = models.TextField()
     startdate = models.DateField()
     enddate = models.DateField()
+    party = models.TextField()
