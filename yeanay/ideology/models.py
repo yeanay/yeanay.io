@@ -10,3 +10,25 @@ class ideology(models.Model):
     name = models.TextField()
     district = models.IntegerField()
     chamber = models.CharField(max_length=6)
+
+class legislator(models.Model):
+    govtrackid = models.IntegerField()
+    lastname = models.TextField()
+    firstname = models.TextField()
+    namemodifier = models.TextField()
+    birthday = models.DateField()
+    gender = models.TextField()
+    pvsid = models.TextField()
+    bioguideid = models.TextField()
+    youtubeid = models.TextField()
+    twitterid = models.TextField()
+    facebookid = models.TextField()
+    thomasid = models.TextField()
+
+class legislator_session(models.Model):
+    govtrackid = models.IntegerField()
+    chamber = models.TextField()
+    district = models.IntegerField()
+    state = models.TextField()
+    startdate = models.DateField()
+    enddate = models.DateField()
