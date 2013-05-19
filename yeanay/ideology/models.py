@@ -1,17 +1,6 @@
 from django.db import models
 
-class ideology(models.Model):
-    congress = models.IntegerField()
-    icpsr_id = models.IntegerField()
-    first_dimension = models.FloatField()
-    second_dimension = models.FloatField()
-    state_id = models.IntegerField()
-    party_id = models.IntegerField()
-    name = models.TextField()
-    district = models.IntegerField()
-    chamber = models.CharField(max_length=6)
-
-class legislator(models.Model):
+class Legislator(models.Model):
     govtrackid = models.IntegerField()
     lastname = models.TextField()
     firstname = models.TextField()
@@ -26,8 +15,9 @@ class legislator(models.Model):
     thomasid = models.TextField()
     icpsrid = models.TextField()
 
-class legislator_session(models.Model):
+class LegislatorSession(models.Model):
     govtrackid = models.IntegerField()
+    legislator = models.ForeignKey(Legislator)
     chamber = models.TextField()
     district = models.IntegerField()
     state = models.TextField()
@@ -35,3 +25,15 @@ class legislator_session(models.Model):
     enddate = models.DateField(null=True, blank=True)
     party = models.TextField()
     session = models.IntegerField()
+
+class Ideology(models.Model):
+    legislator = models.ForeignKey(Legislator)
+    congress = models.IntegerField()
+    icpsrid = models.IntegerField()
+    first_dimension = models.FloatField()
+    second_dimension = models.FloatField()
+    state_id = models.IntegerField()
+    party_id = models.IntegerField()
+    name = models.TextField()
+    district = models.IntegerField()
+    chamber = models.CharField(max_length=6)
