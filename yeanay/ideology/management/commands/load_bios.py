@@ -1,13 +1,16 @@
 from django.core.management.base import BaseCommand, CommandError
-from ideology.models import legislator_session, legislator
+from ideology.models import LegislatorSession, Legislator
 from django.conf import settings
 
+from nyt_api import *
+import time
 import os, sys
 
 from lxml import etree as et
 
 xml_leg_dict = {
     'id':'govtrackid',
+    'icpsrid':'icpsrid',
     'lastname': 'lastname',
     'firstname': 'firstname',
     'birthday': 'birthday',
@@ -35,7 +38,8 @@ class Command(BaseCommand):
     def list_bio_xml(self):
         """Lists bioguide XML files from govtrack"""
         files = os.listdir('data/bios/')
-        return files
+        filtered = filter(lambda x: x[-3:]=='xml', files)
+        return filtered
 
     def parse_xml(self, f):
         """Parses a given XML file into a list of
@@ -85,15 +89,33 @@ class Command(BaseCommand):
         """Loads a python dictionary of bio data into
         database"""
         leg_dict, sess_dict = self.create_dicts(person_dict)
-        if legislator.objects.filter(govtrackid=leg_dict['govtrackid']).exists():
-            pass
+        if Legislator.objects.filter(govtrackid=leg_dict['govtrackid']).exists():
+            new_leg = Legislator.objects.get(govtrackid=leg_dict['govtrackid'])
         else:
-            new_leg = legislator(**leg_dict)
+            new_leg = Legislator(**leg_dict)
             new_leg.save()
-        new_sess = legislator_session(**sess_dict)
+        new_sess = LegislatorSession(legislator=new_leg, **sess_dict)
         new_sess.save()
 
+    def replace_missing_icpsr(self):
+        f = open('./data/bioguide_to_icpsr.csv')
+        bioguides = f.readlines()
+        for bio in bioguides:
+            bio = bio.rstrip()
+            name, bio_id, icpsr = bio.split(',')
+            bio_id = bio_id.strip()
+            icpsr = icpsr.strip()
+            leg = Legislator.objects.filter(bioguideid=bio_id).reverse()[0]
+            leg.icpsrid = icpsr
+            leg.save()
+        
+        
     def handle(self, *args, **options):
+
+        ## Delete Existing Data (removes chance of duplicates) ##
+        Legislator.objects.all().delete()
+        LegislatorSession.objects.all().delete()
+        
         files = self.list_bio_xml()
         bios = []
         for f in files:
@@ -104,5 +126,18 @@ class Command(BaseCommand):
             sys.stdout.write('\rAdded {0} bios so far'.format(counter))
             sys.stdout.flush()
             self.load_to_db(b)
-        sys.stdout.write('Done!\n')
+        sys.stdout.write('\nDone!\n')
         sys.stdout.flush()
+
+        print "Loading Missing ICPSR IDs"
+        self.replace_missing_icpsr()
+
+        no_icpsr = Legislator.objects.filter(icpsrid = '')
+        print 'Gathering {0} missing ICPSR IDs from NYT API'.format(len(no_icpsr))
+        for c, leg in enumerate(no_icpsr):
+            sys.stdout.write('\r{0} icpsr gathered'.format(c+1))
+            sys.stdout.flush()
+            icpsr = get_leg_icpsr(leg.bioguideid)
+            leg.icpsrid = icpsr
+            leg.save()
+            time.sleep(1)
