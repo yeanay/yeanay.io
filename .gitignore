@@ -3,3 +3,4 @@ env/
 /yeanay/yeanay/local_settings.py
 *~
 /yeanay/data/bios/*
+/.vagrant/machines/default/virtualbox/id
