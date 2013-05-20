@@ -16,7 +16,8 @@ A project that allows people to explore polarization in Congress and its effects
 
 - Navigate to the shared folder inside the vm - `cd /usr/local/yeanay/yeanay/`
 - sync the database (`python manage.py syncdb`)
-- load ideology data via fixtures (`python manage.py loaddata ideology`)
+- load member data via fixtures (`python manage.py loaddata ideology`)
+- load ideology from CSV (`python manage.py load_ideology`)
 
 - start the server `python manage.py runserver [::]:8000`
 
