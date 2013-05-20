@@ -5,6 +5,7 @@ apt-get update
 apt-get install -y python-dev
 apt-get install -y python-setuptools
 apt-get install -y python-pip
+apt-get install -y python-lxml
 
 apt-get install -y postgresql
 apt-get install -y postgresql-server-dev-9.1
