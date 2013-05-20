@@ -18,6 +18,6 @@ A project that allows people to explore polarization in Congress and its effects
 - sync the database (`python manage.py syncdb`)
 - load ideology data via fixtures (`python manage.py loaddata ideology`)
 
-- start the server `python manage.py runserver [::]:8000
+- start the server `python manage.py runserver [::]:8000`
 
 - navigate to polarization data from browser `http://localhost:8001/polarization/`
