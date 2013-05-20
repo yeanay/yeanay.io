@@ -134,10 +134,4 @@ class Command(BaseCommand):
 
         no_icpsr = Legislator.objects.filter(icpsrid = '')
         print 'Gathering {0} missing ICPSR IDs from NYT API'.format(len(no_icpsr))
-        for c, leg in enumerate(no_icpsr):
-            sys.stdout.write('\r{0} icpsr gathered'.format(c+1))
-            sys.stdout.flush()
-            icpsr = get_leg_icpsr(leg.bioguideid)
-            leg.icpsrid = icpsr
-            leg.save()
-            time.sleep(1)
+        replace_missing_icpsr()
