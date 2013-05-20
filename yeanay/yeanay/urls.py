@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 
-from ideology.views import congress
+from ideology.views import congress, polarization_over_time
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -8,7 +8,7 @@ from ideology.views import congress
 
 urlpatterns = patterns('',
     url(r'^ideology/congress/(\d+)/(\w+)/', congress),
-
+    url(r'^polarization/', polarization_over_time),
     # Examples:
     # url(r'^$', 'yeanay.views.home', name='home'),
     # url(r'^yeanay/', include('yeanay.foo.urls')),
